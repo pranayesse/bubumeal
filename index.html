@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#3E1A00" />
+  <title>Bubu's Diet Plan</title>
+  <link rel="icon" href="bubu icon.gif" type="image/gif" />
+  <link rel="apple-touch-icon" href="bubu icon.gif" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Pacifico&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ===== LOADING SCREEN ===== -->
+<div id="loading-screen">
+  <div class="loading-inner">
+    <img id="loading-gif" src="main animation loading page.gif" alt="Loading…" />
+    <p class="loading-tagline">Preparing Bubu's meal plan…</p>
+    <div class="loading-dots"><span></span><span></span><span></span></div>
+  </div>
+</div>
+
+<!-- ===== FOOD PARTICLES ===== -->
+<div id="food-particles" aria-hidden="true"></div>
+
+<!-- ===== SUPPLEMENT STRIP (fixed bottom bar) ===== -->
+<div id="supplement-strip" class="supplement-strip hidden">
+  <button class="supplement-pill" id="supp-btn-iron_b12">
+    <span class="supp-icon">🩸</span>
+    <div class="supp-info">
+      <span class="supp-label">Iron + B12</span>
+      <span class="supp-time">7:30 AM · with breakfast</span>
+    </div>
+    <span class="supp-tag" id="supp-tag-iron_b12">Take</span>
+  </button>
+  <button class="supplement-pill" id="supp-btn-mag_d3">
+    <span class="supp-icon">✨</span>
+    <div class="supp-info">
+      <span class="supp-label">Magnesium + D3</span>
+      <span class="supp-time">10:30 PM · before sleep</span>
+    </div>
+    <span class="supp-tag" id="supp-tag-mag_d3">Take</span>
+  </button>
+</div>
+
+<!-- ===== MAIN APP ===== -->
+<div id="app" class="hidden">
+
+  <!-- HEADER -->
+  <header id="main-header">
+    <div class="header-left">
+      <img src="bubu icon.gif" class="header-avatar" alt="Bubu" />
+      <div>
+        <h1 class="header-title" id="header-title">Bubu's Diet Plan</h1>
+        <p class="header-sub" id="header-sub">Eating healthy, one meal at a time</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <div id="user-info" class="hidden">
+        <span id="user-greeting" class="user-greeting"></span>
+        <button class="btn-ghost" id="logout-btn">Logout</button>
+      </div>
+      <button class="btn-outline" id="login-btn">Login</button>
+    </div>
+  </header>
+
+  <!-- DATE + TIME BANNER -->
+  <div class="date-banner">
+    <div class="date-left">
+      <span id="date-display" class="date-text"></span>
+      <span id="time-display" class="time-text"></span>
+    </div>
+    <div id="fast-day-badge" class="fast-badge hidden">
+      <img src="bubu eating pani puri.png" alt="Fast Day" class="fast-badge-img" />
+      <div>
+        <strong>🥄 Fast Day!</strong>
+        <small>Veg only · Pani Puri allowed</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- MISSED MEAL WARNING BANNER -->
+  <div id="missed-meal-banner" class="missed-banner hidden">
+    <span class="missed-icon">⚠️</span>
+    <span id="missed-banner-text">0 meals missed</span>
+  </div>
+
+  <!-- HERO: CURRENT / NEXT MEAL -->
+  <section id="meal-hero">
+    <div class="hero-image-wrap" id="hero-image-wrap">
+      <img id="hero-image" src="main animation loading page.gif" alt="Meal Visual" />
+      <div class="hero-image-overlay"></div>
+    </div>
+    <div class="hero-content">
+      <div class="meal-badge" id="meal-badge">Current Meal</div>
+      <h2 class="meal-title" id="meal-title">Morning Meal</h2>
+      <p class="meal-time-tag" id="meal-time-tag">7:30 AM – 10:00 AM</p>
+
+      <!-- Supplement inline hint -->
+      <div id="hero-supp-hint" class="hero-supp-hint hidden"></div>
+
+      <!-- Logged state -->
+      <div id="hero-logged" class="hero-logged hidden">
+        <div class="logged-row" id="hero-logged-items"></div>
+        <div class="logged-kcal-row">
+          <span id="hero-logged-kcal" class="logged-kcal-tag">0 kcal</span>
+          <button class="btn-edit-meal" id="hero-edit-btn">Edit</button>
+        </div>
+      </div>
+
+      <!-- Log prompt (when not logged) -->
+      <div id="hero-prompt" class="hero-prompt">
+        <p class="prompt-question" id="prompt-question">What are you eating?</p>
+        <button class="btn-eat" id="hero-log-btn">🍽️ Log This Meal</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TODAY'S MEAL TIMELINE -->
+  <section class="section" id="timeline-section">
+    <h3 class="section-title">Today's Meal Plan</h3>
+    <div class="timeline" id="meal-timeline"></div>
+  </section>
+
+  <!-- FOOD LOG + CALORIE RING -->
+  <section class="section" id="food-log-section">
+    <h3 class="section-title">Today's Food Log</h3>
+    <div class="food-log-layout">
+      <div class="calorie-ring-wrap">
+        <svg viewBox="0 0 120 120" class="calorie-ring-svg" aria-hidden="true">
+          <circle class="ring-track" cx="60" cy="60" r="52" />
+          <circle class="ring-progress" id="calorie-ring-circle" cx="60" cy="60" r="52" />
+        </svg>
+        <div class="calorie-ring-center">
+          <span class="cal-consumed" id="calories-consumed">0</span>
+          <small class="cal-label">/ 1400 kcal</small>
+          <span class="cal-remaining" id="calories-remaining">1400 left</span>
+        </div>
+      </div>
+      <div class="log-entries-wrap">
+        <div id="log-entries-list">
+          <div class="log-empty-state">
+            <img src="bubu.gif" class="log-empty-gif" alt="Bubu" />
+            <p>No meals logged yet!</p>
+            <small>Tap a meal card to log what you ate</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="btn-primary btn-log-now" id="btn-log-now">🍽️ Log Current Meal</button>
+  </section>
+
+  <!-- NUTRITION CHART -->
+  <section class="section" id="nutrition-chart-section">
+    <h3 class="section-title">Nutrition Tracker</h3>
+    <div class="nutrition-bars">
+      <div class="nutri-row">
+        <span class="nutri-label">Protein</span>
+        <div class="nutri-bar-wrap"><div class="nutri-bar-fill" id="nutri-protein-bar"></div></div>
+        <span class="nutri-val" id="nutri-protein-val">0g / 55g</span>
+      </div>
+      <div class="nutri-row">
+        <span class="nutri-label">🩸 Iron</span>
+        <div class="nutri-bar-wrap"><div class="nutri-bar-fill" id="nutri-iron-bar"></div></div>
+        <span class="nutri-val" id="nutri-iron-val">0mg / 18mg</span>
+      </div>
+      <div class="nutri-row">
+        <span class="nutri-label">Vitamin C</span>
+        <div class="nutri-bar-wrap"><div class="nutri-bar-fill" id="nutri-vitc-bar"></div></div>
+        <span class="nutri-val" id="nutri-vitc-val">0mg / 80mg</span>
+      </div>
+      <div class="nutri-row">
+        <span class="nutri-label">✨ B12</span>
+        <div class="nutri-bar-wrap"><div class="nutri-bar-fill" id="nutri-b12-bar"></div></div>
+        <span class="nutri-val" id="nutri-b12-val">0mcg / 2.4mcg</span>
+      </div>
+      <div class="nutri-row">
+        <span class="nutri-label">Fiber</span>
+        <div class="nutri-bar-wrap"><div class="nutri-bar-fill" id="nutri-fiber-bar"></div></div>
+        <span class="nutri-val" id="nutri-fiber-val">0g / 25g</span>
+      </div>
+    </div>
+    <p class="nutri-note">Iron & B12 are priority — Bubu's deficiency targets</p>
+  </section>
+
+  <!-- HISTORY (7 days) -->
+  <section class="section" id="history-section">
+    <h3 class="section-title">Past 7 Days</h3>
+    <div id="history-list" class="history-list">
+      <p style="text-align:center;color:var(--text-light)">Loading history…</p>
+    </div>
+  </section>
+
+  <!-- WEIGHT TRACKER -->
+  <section class="section" id="weight-section">
+    <h3 class="section-title">Weight Goal Tracker</h3>
+    <div class="weight-card">
+      <div class="weight-numbers">
+        <div class="weight-item current">
+          <span class="weight-label">Current</span>
+          <span class="weight-value" id="current-weight-display">65 kg</span>
+        </div>
+        <div class="weight-arrow">→</div>
+        <div class="weight-item target">
+          <span class="weight-label">Target</span>
+          <span class="weight-value">55 kg</span>
+        </div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="weight-progress-fill"></div>
+        </div>
+        <div class="progress-labels">
+          <span>65 kg</span>
+          <span id="progress-text">0% there!</span>
+          <span>55 kg</span>
+        </div>
+      </div>
+      <p class="weight-note" id="weight-note">Every meal counts!</p>
+      <div id="weight-update-area" class="hidden">
+        <div class="weight-input-row">
+          <input type="number" id="weight-input" class="weight-input" placeholder="Today's weight (kg)" step="0.1" min="40" max="100" />
+          <button class="btn-primary btn-sm" id="save-weight-btn">Log Weight</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BUBU'S FAVES -->
+  <section class="section" id="faves-section">
+    <h3 class="section-title">Bubu's Favourite Flavours</h3>
+    <div class="faves-row">
+      <span class="fave-chip">🍅 Tomato</span>
+      <span class="fave-chip">🍋 Tamarind</span>
+      <span class="fave-chip">🌿 Gongura</span>
+      <span class="fave-chip">🐟 Fish</span>
+      <span class="fave-chip">🦐 Prawns</span>
+      <span class="fave-chip">🫙 Pani Puri</span>
+      <span class="fave-chip">🍿 Bhel Puri</span>
+      <span class="fave-chip">🍦 Ice Creams</span>
+      <span class="fave-chip">🍲 Cerelac</span>
+      <span class="fave-chip">🍋 Lemons Lemons & more lemons</span>
+      <span class="fave-chip fave-chip-joke" title="Eats 3 bites and says 'I'm full'">🎩 Certified Baby ✨</span>
+    </div>
+    <p class="faves-joke">*(gets a meal, takes 4 bites, then feeds everyone else saying “I’m full” — like a little baby)*</p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="main-footer">
+    <img src="bubu.gif" class="footer-gif" alt="Bubu" />
+    <div class="footer-text">
+      <p id="footer-msg">Stay healthy, stay happy!</p>
+      <small id="footer-small">Made with love by Dudu</small>
+    </div>
+    <img src="bubu icon.gif" class="footer-gif footer-gif-right" alt="Bubu" />
+  </footer>
+
+</div><!-- end #app -->
+
+<!-- ===== ADMIN FAB ===== -->
+<button id="admin-fab" class="admin-fab hidden" title="Open Admin Panel">⚙️</button>
+
+<!-- ===== ADMIN SIDE PANEL ===== -->
+<div id="admin-overlay" class="admin-overlay hidden"></div>
+<aside id="admin-panel" class="admin-panel hidden">
+  <div class="admin-header">
+    <h2>🥘 Diet Plan Manager</h2>
+    <button class="btn-icon" id="close-admin-btn">✕</button>
+  </div>
+  <div class="admin-scroll">
+    <div class="admin-block">
+      <label class="admin-label">Managing date</label>
+      <input type="date" id="admin-date-input" class="admin-input" />
+    </div>
+    <div class="admin-block toggle-row">
+      <label class="admin-label">Fast Day?</label>
+      <label class="toggle-switch">
+        <input type="checkbox" id="fast-day-toggle" />
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+    <div class="admin-block">
+      <label class="admin-label">Day Notes (optional)</label>
+      <textarea id="admin-day-notes" class="admin-textarea" placeholder="E.g. Drink lots of water today"></textarea>
+    </div>
+    <div id="meal-editors">
+      <div class="meal-editor-block" data-meal="morning">
+        <div class="meal-editor-title">
+          <img src="dudu feeding bubu breakfast.png" class="meal-editor-img" alt="Morning" />
+          <h4>🌅 Morning Meal</h4>
+        </div>
+        <p class="meal-time-hint">7:30 AM – 10:00 AM · ~300 kcal</p>
+        <div class="meal-items-editor" id="editor-morning"></div>
+        <button class="btn-add-item" data-meal="morning">+ Add Item</button>
+      </div>
+      <div class="meal-editor-block" data-meal="coffee">
+        <div class="meal-editor-title">
+          <img src="bubu.gif" class="meal-editor-img" alt="Coffee" />
+          <h4>☕ Coffee Break</h4>
+        </div>
+        <p class="meal-time-hint">11:00 AM – 12:00 PM · ~60 kcal</p>
+        <div class="meal-items-editor" id="editor-coffee"></div>
+        <button class="btn-add-item" data-meal="coffee">+ Add Item</button>
+      </div>
+      <div class="meal-editor-block" data-meal="lunch">
+        <div class="meal-editor-title">
+          <img src="bubu-dudu-eating lunch.webp" class="meal-editor-img" alt="Lunch" />
+          <h4>🍱 Lunch</h4>
+        </div>
+        <p class="meal-time-hint">12:30 PM – 2:30 PM · ~500 kcal</p>
+        <div class="meal-items-editor" id="editor-lunch"></div>
+        <button class="btn-add-item" data-meal="lunch">+ Add Item</button>
+      </div>
+      <div class="meal-editor-block" data-meal="snack">
+        <div class="meal-editor-title">
+          <img src="bubu.gif" class="meal-editor-img" alt="Snack" />
+          <h4>🍎 Snack</h4>
+        </div>
+        <p class="meal-time-hint">3:30 PM – 6:30 PM · ~200 kcal</p>
+        <div class="meal-items-editor" id="editor-snack"></div>
+        <button class="btn-add-item" data-meal="snack">+ Add Item</button>
+      </div>
+      <div class="meal-editor-block" data-meal="dinner">
+        <div class="meal-editor-title">
+          <img src="dudu feeding bubu dinner.png" class="meal-editor-img" alt="Dinner" />
+          <h4>🌙 Dinner</h4>
+        </div>
+        <p class="meal-time-hint">7:00 PM – 10:00 PM · ~400 kcal</p>
+        <div class="meal-items-editor" id="editor-dinner"></div>
+        <button class="btn-add-item" data-meal="dinner">+ Add Item</button>
+      </div>
+    </div>
+    <button class="btn-save-plan" id="save-plan-btn">💾 Save Plan</button>
+    <div id="save-status" class="save-status hidden"></div>
+  </div>
+</aside>
+
+<!-- ===== MEAL TAP MODAL ===== -->
+<div id="meal-tap-modal" class="modal-backdrop hidden">
+  <div class="modal-box modal-box-wide">
+    <button class="modal-close" id="close-meal-tap-btn">✕</button>
+    <div class="meal-tap-header">
+      <span class="meal-tap-emoji" id="meal-tap-emoji">🌅</span>
+      <div>
+        <h2 class="modal-title" id="meal-tap-title">Morning Meal</h2>
+        <p class="modal-sub" id="meal-tap-time">7:30 AM – 10:00 AM</p>
+        <p class="meal-kcal-limit" id="meal-kcal-limit">Target: ~300 kcal</p>
+      </div>
+    </div>
+
+    <!-- Search food -->
+    <button class="btn-search-food" id="open-food-search-btn">🔍 Not here? Search food</button>
+
+    <!-- Supplement reminder inside modal -->
+    <div id="modal-supp-hint" class="modal-supp-hint hidden"></div>
+
+    <!-- Recommended options -->
+    <p class="options-heading">Recommended for you</p>
+    <div id="food-option-grid" class="food-option-grid"></div>
+
+    <!-- Recently logged -->
+    <div id="recent-section" class="hidden">
+      <p class="options-divider">🕐 Recently logged</p>
+      <div id="recent-options" class="food-option-grid"></div>
+    </div>
+
+    <!-- Other canteen options (collapsible) -->
+    <div id="other-section" class="hidden">
+      <button class="btn-toggle-section" id="toggle-other-btn">▼ Show more canteen options</button>
+      <div id="other-options" class="food-option-grid collapsed"></div>
+    </div>
+
+    <!-- Admin custom picks from Firestore -->
+    <div id="admin-picks-section" class="hidden">
+      <p class="options-divider">💕 Dudu's picks for today</p>
+      <div id="admin-food-options" class="food-option-grid"></div>
+    </div>
+
+    <!-- Treats section -->
+    <div id="treat-section" class="hidden">
+      <p class="options-divider treat-divider">🎉 Occasional treats</p>
+      <div id="treat-options" class="food-option-grid"></div>
+    </div>
+
+    <!-- Selection summary bar -->
+    <div id="selection-bar" class="selection-bar hidden">
+      <div class="selection-bar-info">
+        <span id="sel-count">0 selected</span>
+        <span class="sel-sep">·</span>
+        <span id="sel-kcal">0 kcal</span>
+      </div>
+      <button class="btn-primary btn-log-it" id="log-selection-btn">Log It!</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== FOOD SEARCH MODAL ===== -->
+<div id="food-search-modal" class="modal-backdrop hidden">
+  <div class="modal-box modal-box-wide">
+    <button class="modal-close" id="close-food-search-btn">✕</button>
+    <h2 class="modal-title">Search Food</h2>
+    <p class="modal-sub">Indian foods + canteen + Open Food Facts</p>
+
+    <div class="search-input-row">
+      <input type="text" id="food-search-input" class="modal-input" placeholder="Try: Dosa, Quinoa salad, Apple…" autocomplete="off" />
+      <button class="btn-primary btn-sm" id="food-search-btn">Go</button>
+    </div>
+
+    <div id="search-results-area">
+      <div id="search-spinner" class="search-spinner hidden">
+        <div class="loading-dots"><span></span><span></span><span></span></div>
+        <small>Searching…</small>
+      </div>
+      <div id="search-results-list" class="search-results-list"></div>
+      <div id="search-empty-msg" class="search-empty hidden">No results found. Try manual entry below.</div>
+    </div>
+
+    <div class="manual-entry-block">
+      <p class="options-divider">Or enter manually</p>
+      <div class="manual-entry-row">
+        <input type="text" id="manual-food-name" class="modal-input" placeholder="Food name" />
+        <input type="number" id="manual-food-kcal" class="modal-input input-sm" placeholder="kcal" min="0" max="3000" />
+        <button class="btn-primary btn-sm" id="add-manual-food-btn">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SUPPLEMENT MODAL ===== -->
+<div id="supplement-modal" class="modal-backdrop hidden">
+  <div class="modal-box">
+    <button class="modal-close" id="close-supplement-modal-btn">✕</button>
+    <div class="supp-modal-icon" id="supp-modal-icon">🩸</div>
+    <h2 class="modal-title" id="supp-modal-title">Iron + B12</h2>
+    <p class="modal-sub" id="supp-modal-subtitle">Take with your morning meal</p>
+    <p class="supp-modal-note" id="supp-modal-note">Take with food, not with coffee!</p>
+    <div id="supp-not-taken-area">
+      <button class="btn-primary btn-full" id="mark-supp-taken-btn">✅ Mark as Taken</button>
+    </div>
+    <div id="supp-taken-area" class="hidden supp-taken-state">
+      <div class="supp-taken-check">✅</div>
+      <p>Already taken today!</p>
+      <small id="supp-taken-time-label"></small>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LOGIN MODAL ===== -->
+<div id="login-modal" class="modal-backdrop hidden">
+  <div class="modal-box">
+    <button class="modal-close" id="close-login-modal">✕</button>
+    <img src="bubu icon.gif" class="modal-avatar" alt="Bubu" />
+    <h2 class="modal-title">Welcome Back!</h2>
+    <p class="modal-sub">Login to see your personalised plan</p>
+    <input type="email" id="login-email" class="modal-input" placeholder="Email address" autocomplete="email" />
+    <input type="password" id="login-password" class="modal-input" placeholder="Password" autocomplete="current-password" />
+    <button class="btn-primary btn-full" id="submit-login-btn">Login</button>
+    <p id="login-error" class="login-error hidden"></p>
+  </div>
+</div>
+
+<!-- ===== CELEBRATION OVERLAY ===== -->
+<div id="celebration-overlay" class="full-overlay hidden">
+  <div class="celebration-box">
+    <img src="Bubu-and-Dudu.png" class="celebration-img" alt="Bubu and Dudu" />
+    <h2 class="celebration-title">Yay Bubu!</h2>
+    <p id="celebration-msg">Dudu is SO proud of you!</p>
+    <button class="btn-primary btn-celebration" id="close-celebration-btn">Thanks Dudu!</button>
+  </div>
+  <div class="confetti-container" id="confetti-container"></div>
+</div>
+
+<!-- ===== WARNING OVERLAY ===== -->
+<div id="warning-overlay" class="full-overlay hidden">
+  <div class="warning-box">
+    <img src="i will eat you up bubu warning.webp" class="warning-img" alt="Warning!" />
+    <h2 class="warning-title">Bubu!</h2>
+    <p id="warning-msg">You haven't logged your meal yet! Dudu is watching!</p>
+    <button class="btn-primary" id="close-warning-btn">Okay okay!</button>
+  </div>
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+<!-- EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="firebase-config.js"></script>
+<script src="emailjs-config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
