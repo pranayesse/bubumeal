@@ -759,22 +759,27 @@ async function migrateLocalLogs() {
   } catch(e) {}
 }
 
-// Strip meal slots whose loggedAt timestamp doesn't belong to dateKey
+// Strip meal slots that are confirmed to belong to a different date.
+// If loggedAt is missing/null (e.g. pending serverTimestamp), keep the entry.
 function sanitizeLog(raw, dateKey) {
   if (!raw) return {};
   const result = {};
   Object.keys(MEAL_WINDOWS).forEach(slot => {
     const entry = raw[slot];
-    if (!entry?.loggedAt) return;
-    let loggedDate;
-    if (typeof entry.loggedAt === 'string') {
-      loggedDate = entry.loggedAt.substring(0, 10);
-    } else if (entry.loggedAt?.toDate) {
-      // Firestore Timestamp
-      const d = entry.loggedAt.toDate();
+    if (!entry?.items?.length) return;   // skip empty slots
+    let loggedDate = null;
+    const ts = entry.loggedAt;
+    if (typeof ts === 'string' && ts.length >= 10) {
+      loggedDate = ts.substring(0, 10);  // ISO string — "YYYY-MM-DD..."
+    } else if (ts?.toDate) {
+      // Firestore Timestamp — use local date methods so IST is respected
+      const d = ts.toDate();
       loggedDate = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
     }
-    if (loggedDate === dateKey) result[slot] = entry;
+    // Only drop if we are SURE it belongs to a different date
+    if (loggedDate === null || loggedDate === dateKey) {
+      result[slot] = entry;
+    }
   });
   return result;
 }
