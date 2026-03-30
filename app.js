@@ -795,6 +795,7 @@ async function loadPage() {
     state.todayPlan = doc.exists ? doc.data() : null;
   } catch(e) { state.todayPlan = null; }
 
+  // Initial load
   try {
     const logDoc = await db.collection('meal_logs').doc(dateKey).get();
     const raw = logDoc.exists ? logDoc.data() : loadLocalLog();
@@ -802,6 +803,23 @@ async function loadPage() {
   } catch(e) {
     state.todayLog = sanitizeLog(loadLocalLog(), dateKey);
   }
+
+  // Real-time listener — re-renders UI whenever Bubu logs a meal on her phone
+  if (window._unsubscribeLog) window._unsubscribeLog();
+  try {
+    let firstSnapshot = true;
+    window._unsubscribeLog = db.collection('meal_logs').doc(dateKey)
+      .onSnapshot(snap => {
+        if (firstSnapshot) { firstSnapshot = false; return; } // skip — already loaded above
+        const raw = snap.exists ? snap.data() : loadLocalLog();
+        state.todayLog = sanitizeLog(raw, dateKey);
+        const isFast = state.todayPlan?.isFastDay ?? isFastDayDate(new Date());
+        renderHero(isFast);
+        renderTimeline(isFast);
+        renderFoodLogSection();
+        renderNutritionChart();
+      }, () => {});
+  } catch(e) {}
 
   try {
     const snap = await db.collection('settings').doc('weight').get();
