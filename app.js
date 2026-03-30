@@ -759,6 +759,26 @@ async function migrateLocalLogs() {
   } catch(e) {}
 }
 
+// Strip meal slots whose loggedAt timestamp doesn't belong to dateKey
+function sanitizeLog(raw, dateKey) {
+  if (!raw) return {};
+  const result = {};
+  Object.keys(MEAL_WINDOWS).forEach(slot => {
+    const entry = raw[slot];
+    if (!entry?.loggedAt) return;
+    let loggedDate;
+    if (typeof entry.loggedAt === 'string') {
+      loggedDate = entry.loggedAt.substring(0, 10);
+    } else if (entry.loggedAt?.toDate) {
+      // Firestore Timestamp
+      const d = entry.loggedAt.toDate();
+      loggedDate = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+    }
+    if (loggedDate === dateKey) result[slot] = entry;
+  });
+  return result;
+}
+
 // ── PAGE LOAD ──────────────────────────────────────────────
 async function loadPage() {
   const dateKey = todayStr();
@@ -773,11 +793,9 @@ async function loadPage() {
   try {
     const logDoc = await db.collection('meal_logs').doc(dateKey).get();
     const raw = logDoc.exists ? logDoc.data() : loadLocalLog();
-    // Only use data if it matches today's date (guard against stale cache)
-    state.todayLog = (raw && raw.date === dateKey) ? raw : {};
+    state.todayLog = sanitizeLog(raw, dateKey);
   } catch(e) {
-    const raw = loadLocalLog();
-    state.todayLog = (raw && raw.date === dateKey) ? raw : {};
+    state.todayLog = sanitizeLog(loadLocalLog(), dateKey);
   }
 
   try {
