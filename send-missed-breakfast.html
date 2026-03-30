@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sending reminder…</title>
+  <style>
+    body { font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #3E1A00; color: #fff; flex-direction: column; gap: 16px; }
+    .box { background: rgba(255,255,255,0.1); border-radius: 16px; padding: 32px 40px; text-align: center; max-width: 380px; }
+    h2 { margin: 0 0 8px; font-size: 1.4rem; }
+    p  { margin: 0; opacity: 0.85; font-size: 0.95rem; line-height: 1.5; }
+    .status { margin-top: 20px; font-size: 1.1rem; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <div style="font-size:2.5rem">🍳</div>
+    <h2>Sending Bubu a breakfast reminder…</h2>
+    <p>Dudu is letting Priyanka know she missed her morning meal today!</p>
+    <div class="status" id="status">⏳ Sending…</div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="emailjs-config.js"></script>
+  <script>
+    (async () => {
+      const el = document.getElementById('status');
+      try {
+        emailjs.init(EMAILJS_CONFIG.publicKey);
+        await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, {
+          to_email:  EMAILJS_CONFIG.recipientEmail,
+          bubu_name: 'Priyanka',
+          meal_name: 'Morning Meal',
+          meal_time: '7:30 AM – 10:00 AM',
+          message:   'Also take your Iron + B12 supplement with breakfast! 🩸',
+        });
+        el.textContent = '✅ Email sent to Priyanka!';
+        el.style.color = '#A5D6A7';
+      } catch(e) {
+        el.textContent = '❌ Failed: ' + (e?.text || e?.message || JSON.stringify(e));
+        el.style.color = '#EF9A9A';
+      }
+    })();
+  </script>
+</body>
+</html>

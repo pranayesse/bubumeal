@@ -624,6 +624,16 @@ function yesterdayStr() {
 }
 
 // ── BOOT ──────────────────────────────────────────────────
+let _lastLoadedDate = null;
+
+async function refreshIfNewDay() {
+  const today = todayStr();
+  if (_lastLoadedDate && _lastLoadedDate !== today) {
+    _lastLoadedDate = today;
+    await loadPage();
+  }
+}
+
 window.addEventListener('DOMContentLoaded', () => {
   spawnParticles();
   startClock();
@@ -637,6 +647,13 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     auth.onAuthStateChanged(handleAuthChange);
   }, 2800);
+
+  // Reload data when user returns to the tab on a new day
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') refreshIfNewDay();
+  });
+  // Also check every 5 minutes (for when tab stays open overnight)
+  setInterval(refreshIfNewDay, 5 * 60 * 1000);
 });
 
 function startClock() {
@@ -745,6 +762,7 @@ async function migrateLocalLogs() {
 // ── PAGE LOAD ──────────────────────────────────────────────
 async function loadPage() {
   const dateKey = todayStr();
+  _lastLoadedDate = dateKey;
   const today   = new Date();
 
   try {
@@ -1585,7 +1603,7 @@ async function sendMealReminderEmail(slot) {
       bubu_name:  state.realName || 'Bubu',
       meal_name:  win.label,
       meal_time:  win.time,
-      message:    `Hi Bubu! 🍽️ You haven't logged your ${win.label} yet (${win.time}). Don't forget to eat and log your meal! — Dudu 💕`,
+      message:    `Please eat something and log your meal! Don't skip — Dudu is watching 💕`,
     });
     localStorage.setItem(`email_sent_${todayStr()}_${slot}`, '1');
   } catch(e) { console.warn('Email reminder failed:', e); }
