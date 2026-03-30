@@ -264,6 +264,43 @@ const HOME_DINNERS = [
   { id:'hd14', name:'Prawn Fry + Rasam Rice', emoji:'🦐', kcal:400, protein:24, carbs:46, fat:14, fiber:2, iron:3.0, vitC:10, b12:2.0, tags:['iron','b12','tangy','south-indian'], note:'Seafood combo! ⭐' },
 ];
 
+// ── TELANGANA CURRIES (Dinner – Other Options) ─────────────
+const TELANGANA_CURRIES = [
+  // 🐔 Non-Veg
+  { id:'tc1',  name:'Kodi Kura (Chicken Curry)',         emoji:'🍗', kcal:320, protein:24, carbs:10, fat:18, fiber:1, iron:2.0, vitC:5,  b12:0.4, tags:['protein','south-indian'],                  cat:'telangana', note:'Classic Telangana chicken curry' },
+  { id:'tc2',  name:'Natu Kodi Pulusu (Country Chicken)',emoji:'🍗', kcal:360, protein:26, carbs:12, fat:20, fiber:1, iron:2.5, vitC:6,  b12:0.6, tags:['protein','tangy','south-indian'],           cat:'telangana', note:'Country chicken — rustic & spicy 🌶️' },
+  { id:'tc3',  name:'Mutton Dalcha',                     emoji:'🍖', kcal:380, protein:28, carbs:18, fat:22, fiber:4, iron:4.5, vitC:4,  b12:2.0, tags:['protein','iron','b12','south-indian'],      cat:'telangana', note:'Mutton + dal — hearty & iron-rich!' },
+  { id:'tc4',  name:'Gongura Mutton',                    emoji:'🌿', kcal:380, protein:28, carbs:10, fat:24, fiber:2, iron:4.5, vitC:12, b12:2.0, tags:['protein','iron','b12','tangy','south-indian'],cat:'telangana', note:'Tangy sorrel mutton 🌶️ Telangana classic!' },
+  { id:'tc5',  name:'Mutton Kura',                       emoji:'🍖', kcal:350, protein:26, carbs:8,  fat:22, fiber:1, iron:4.0, vitC:4,  b12:2.0, tags:['protein','iron','b12','south-indian'],      cat:'telangana', note:'Telangana mutton curry' },
+  { id:'tc6',  name:'Chepala Pulusu (Fish Curry)',        emoji:'🐟', kcal:300, protein:22, carbs:12, fat:16, fiber:1, iron:3.0, vitC:8,  b12:3.0, tags:['iron','b12','tangy','south-indian'],        cat:'telangana', note:'Tamarind fish curry — iron & B12 ⭐' },
+  { id:'tc7',  name:'Royyala Kura (Prawn Curry)',         emoji:'🦐', kcal:280, protein:20, carbs:8,  fat:16, fiber:0, iron:2.5, vitC:6,  b12:2.0, tags:['iron','b12','south-indian'],                cat:'telangana', note:'Spicy prawn curry' },
+  { id:'tc8',  name:'Egg Pulusu',                        emoji:'🥚', kcal:220, protein:14, carbs:12, fat:14, fiber:1, iron:2.0, vitC:8,  b12:1.2, tags:['protein','b12','tangy','south-indian'],     cat:'telangana', note:'Tamarind egg curry — tangy!' },
+  { id:'tc9',  name:'Egg Masala Curry',                  emoji:'🥚', kcal:230, protein:14, carbs:10, fat:15, fiber:1, iron:2.0, vitC:5,  b12:1.2, tags:['protein','b12','south-indian'],             cat:'telangana', note:'Spicy egg masala' },
+  // 🌱 Veg
+  { id:'tc10', name:'Sorakaya Pulusu (Bottle Gourd)',     emoji:'🥒', kcal:160, protein:3,  carbs:18, fat:8,  fiber:3, iron:1.2, vitC:12, b12:0,   tags:['veg','tangy','south-indian'],               cat:'telangana', note:'Light tamarind bottle gourd curry' },
+  { id:'tc11', name:'Dosakaya Pappu (Yellow Cucumber Dal)',emoji:'🥒', kcal:220, protein:10, carbs:28, fat:7,  fiber:4, iron:2.8, vitC:10, b12:0,   tags:['veg','tangy','south-indian','iron'],        cat:'telangana', note:'Tangy yellow cucumber dal' },
+  { id:'tc12', name:'Tomato Pappu',                      emoji:'🍅', kcal:210, protein:10, carbs:26, fat:7,  fiber:4, iron:2.5, vitC:18, b12:0,   tags:['veg','tangy','south-indian','vitaminc'],    cat:'telangana', note:'Tangy tomato dal' },
+  { id:'tc13', name:'Palakura Pappu (Spinach Dal)',       emoji:'🌿', kcal:200, protein:10, carbs:22, fat:7,  fiber:5, iron:5.0, vitC:20, b12:0,   tags:['veg','iron','south-indian','vitaminc'],     cat:'telangana', note:'Iron-packed spinach dal ⭐' },
+  { id:'tc14', name:'Beerakaya Kura (Ridge Gourd)',       emoji:'🥬', kcal:150, protein:3,  carbs:16, fat:8,  fiber:3, iron:1.2, vitC:10, b12:0,   tags:['veg','south-indian'],                       cat:'telangana', note:'Mild ridge gourd curry' },
+  { id:'tc15', name:'Vankaya Kura (Brinjal Curry)',       emoji:'🍆', kcal:170, protein:3,  carbs:16, fat:10, fiber:4, iron:1.5, vitC:5,  b12:0,   tags:['veg','south-indian'],                       cat:'telangana', note:'Spiced brinjal curry' },
+  { id:'tc16', name:'Gutti Vankaya (Stuffed Brinjal)',    emoji:'🍆', kcal:200, protein:4,  carbs:18, fat:12, fiber:4, iron:1.8, vitC:6,  b12:0,   tags:['veg','tangy','south-indian'],               cat:'telangana', note:'Masala-stuffed brinjal 💕' },
+  { id:'tc17', name:'Aloo Tomato Kura',                  emoji:'🥔', kcal:200, protein:4,  carbs:26, fat:9,  fiber:3, iron:1.5, vitC:18, b12:0,   tags:['veg','south-indian','vitaminc'],            cat:'telangana', note:'Potato tomato curry' },
+  { id:'tc18', name:'Chikkudukaya Kura (Broad Beans)',    emoji:'🫘', kcal:180, protein:7,  carbs:20, fat:8,  fiber:6, iron:2.5, vitC:10, b12:0,   tags:['veg','iron','fiber','south-indian'],        cat:'telangana', note:'Broad beans curry — iron & fiber!' },
+  { id:'tc19', name:'Cabbage Kura',                      emoji:'🥬', kcal:140, protein:3,  carbs:14, fat:8,  fiber:4, iron:1.2, vitC:30, b12:0,   tags:['veg','south-indian','vitaminc'],            cat:'telangana', note:'Simple cabbage stir-fry' },
+  { id:'tc20', name:'Carrot Beans Curry',                emoji:'🥕', kcal:150, protein:3,  carbs:18, fat:7,  fiber:5, iron:1.5, vitC:15, b12:0,   tags:['veg','south-indian','fiber'],               cat:'telangana', note:'Healthy mixed veg curry' },
+  // 🌿 Bendakaya / Bhindi Variants
+  { id:'tc21', name:'Bendakaya Fry',                     emoji:'🌿', kcal:155, protein:3,  carbs:13, fat:10, fiber:4, iron:1.5, vitC:16, b12:0,   tags:['veg','south-indian','fiber'],               cat:'telangana', note:'Simple okra fry with onions & spices' },
+  { id:'tc22', name:'Bendakaya Pulusu',                  emoji:'🌿', kcal:170, protein:3,  carbs:18, fat:9,  fiber:4, iron:1.5, vitC:16, b12:0,   tags:['veg','tangy','south-indian'],               cat:'telangana', note:'Tamarind-based okra curry' },
+  { id:'tc23', name:'Bendakaya Masala',                  emoji:'🌿', kcal:185, protein:4,  carbs:16, fat:11, fiber:4, iron:1.6, vitC:16, b12:0,   tags:['veg','south-indian'],                       cat:'telangana', note:'Onion-tomato thick okra gravy' },
+  { id:'tc24', name:'Bendakaya Aloo Kura',               emoji:'🌿', kcal:210, protein:4,  carbs:24, fat:10, fiber:4, iron:1.5, vitC:18, b12:0,   tags:['veg','south-indian'],                       cat:'telangana', note:'Bhindi + potato combo' },
+  { id:'tc25', name:'Bendakaya Fry with Groundnut Powder',emoji:'🌿', kcal:220, protein:7,  carbs:14, fat:14, fiber:4, iron:2.0, vitC:15, b12:0,  tags:['veg','south-indian','protein'],             cat:'telangana', note:'Okra fry with peanut crunch 🥜' },
+  { id:'tc26', name:'Bendakaya Karam',                   emoji:'🌿', kcal:160, protein:3,  carbs:12, fat:11, fiber:4, iron:1.5, vitC:16, b12:0,   tags:['veg','south-indian'],                       cat:'telangana', note:'Spicy dry okra 🌶️' },
+  { id:'tc27', name:'Bendakaya Onion Fry',               emoji:'🌿', kcal:175, protein:3,  carbs:15, fat:11, fiber:3, iron:1.4, vitC:14, b12:0,   tags:['veg','south-indian'],                       cat:'telangana', note:'Onion-heavy, sweet-spicy okra' },
+  { id:'tc28', name:'Bendakaya Tomato Kura',             emoji:'🌿', kcal:165, protein:3,  carbs:15, fat:10, fiber:4, iron:1.5, vitC:20, b12:0,   tags:['veg','south-indian','vitaminc'],            cat:'telangana', note:'Okra in tomato gravy' },
+  { id:'tc29', name:'Bendakaya Besan Curry',             emoji:'🌿', kcal:190, protein:6,  carbs:16, fat:11, fiber:4, iron:1.8, vitC:14, b12:0,   tags:['veg','south-indian'],                       cat:'telangana', note:'North-Telangana style okra besan' },
+  { id:'tc30', name:'Stuffed Bendakaya',                 emoji:'🌿', kcal:200, protein:5,  carbs:14, fat:13, fiber:4, iron:1.8, vitC:15, b12:0,   tags:['veg','south-indian'],                       cat:'telangana', note:'Masala-stuffed okra 💕' },
+];
+
 // ── MORNING PRESETS ────────────────────────────────────────
 const MORNING_PRESETS = [
   { id:'mo1', name:'Sprouts + Green Tea + Apple', emoji:'🌱', kcal:160, protein:8, carbs:24, fat:3, fiber:5, iron:3.0, vitC:12, b12:0, tags:['iron','fiber'], note:'Iron-rich start! ⭐' },
@@ -416,9 +453,11 @@ function getRecommendations(slotKey, isFast) {
     }
   } else if (slotKey === 'dinner') {
     recs.recommended = [...HOME_DINNERS];
+    // Always show Telangana curries as other options
+    recs.other = [...TELANGANA_CURRIES];
     if (!isHome) {
       // Can still get canteen food for late office dinners
-      recs.other = [...CANTEEN.hearth_curries, ...CANTEEN.hearth_chicken, ...CANTEEN.hearth_veg, ...CANTEEN.hearth_bread];
+      recs.other = [...recs.other, ...CANTEEN.hearth_curries, ...CANTEEN.hearth_chicken, ...CANTEEN.hearth_veg, ...CANTEEN.hearth_bread];
     }
     if (isFast) {
       recs.recommended = recs.recommended.filter(i => i.tags.includes('veg') || i.tags.includes('south-indian'));
@@ -715,8 +754,13 @@ async function loadPage() {
 
   try {
     const logDoc = await db.collection('meal_logs').doc(dateKey).get();
-    state.todayLog = logDoc.exists ? logDoc.data() : loadLocalLog();
-  } catch(e) { state.todayLog = loadLocalLog(); }
+    const raw = logDoc.exists ? logDoc.data() : loadLocalLog();
+    // Only use data if it matches today's date (guard against stale cache)
+    state.todayLog = (raw && raw.date === dateKey) ? raw : {};
+  } catch(e) {
+    const raw = loadLocalLog();
+    state.todayLog = (raw && raw.date === dateKey) ? raw : {};
+  }
 
   try {
     const snap = await db.collection('settings').doc('weight').get();
@@ -1312,9 +1356,10 @@ async function loadHistory() {
 function renderFooter() {
   const h = new Date().getHours();
   if (h<10)      footerMsg.textContent = "Good morning Bubu! Eat your iron-rich breakfast 🌅";
-  else if (h<14) footerMsg.textContent = "Lunch time! Dudu is thinking of you 💕";
-  else if (h<18) footerMsg.textContent = "Afternoon! Stay hydrated Bubu 💧";
-  else if (h<21) footerMsg.textContent = "Dinner time! Light & healthy 🌙";
+  else if (h<12) footerMsg.textContent = "Coffee break time! Stay hydrated ☕";
+  else if (h<15) footerMsg.textContent = "Lunch time! Dudu is thinking of you 💕";
+  else if (h<19) footerMsg.textContent = "Snack time! Something light & healthy 🍎";
+  else if (h<22) footerMsg.textContent = "Dinner time! Light & healthy 🌙";
   else           footerMsg.textContent = "Great day Bubu! Take your Magnesium + D3 before sleeping 💕";
 }
 
